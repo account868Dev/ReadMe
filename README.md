@@ -1,19 +1,20 @@
-### 개발할 서버목록
+## 개발할 서버목록
 
-### 1. 계정 서버
-##  - 유저 계정 관리
-##  - 유저 로그인 및 회원가입
+## 1. 계정 서버
+###  - 유저 계정 관리
+###  - 유저 로그인 및 회원가입
   
-### 2. 음식점 추천 및 리스트 서버
-##  - 음식점 추천 및 리스트 제공
-##  - 음식점 검색
+## 2. 음식점 추천 및 리스트 서버
+###  - 음식점 추천 및 리스트 제공
+###  - 음식점 검색
 
-### 3. 배치 서버
-##  - 구글 PlaceAPI 
-##  - 기타
+## 3. 배치 서버
+###  - 구글 PlaceAPI 
+###  - 기타
 
 ## DB스키마
 
+<pre><code>
 CREATE TABLE `location_codes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
@@ -91,3 +92,5 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+</code></pre>
