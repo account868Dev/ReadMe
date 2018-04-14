@@ -2,96 +2,143 @@
 ## 개발할 서버목록
 
 ## 1. 계정 서버
-#####  - 유저 계정 관리
-#####  - 유저 로그인 및 회원가입
-  
-## 2. 음식점 추천 및 리스트 서버
-#####  - 음식점 추천 및 리스트 제공
-#####  - 음식점 검색
+#####  - 유저 계정 관리 - 상운
+#####  - 지도 및 거리 추천 - 상운
 
-## 3. 배치 서버
-#####  - 구글 PlaceAPI 
-#####  - 기타
+## 2. 음식점 서버
+#####  - 음식점 추천 및 리스트 제공 - 상운
+#####  - 리뷰 및 좋아요 관리 - 림아
+#####  - Api 음식점 정보 긁어오기 - 림아
+
+## 3. 방관리 서버
+#####  - 방 관리 & 사다리타기 - 림아
 
 ## DB스키마
 
 <pre><code>
-CREATE TABLE `location_codes` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) DEFAULT NULL,
-  `type` char(2) DEFAULT NULL,
-  `city_name` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `restaurant_contents` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `restaurant_id` int(11) DEFAULT NULL,
-  `order` int(11) DEFAULT NULL,
-  `type` varchar(2) DEFAULT NULL,
-  `use_yn` int(1) DEFAULT NULL,
-  `image_name` varchar(50) DEFAULT NULL,
-  `image_url` varchar(200) DEFAULT NULL,
-  `contents` varchar(500) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `restaurants` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `location_code` int(11) DEFAULT NULL,
-  `name` varchar(20) DEFAULT NULL,
-  `use_yn` char(1) DEFAULT NULL,
-  `address` varchar(200) DEFAULT NULL,
-  `address2` varchar(200) DEFAULT NULL,
-  `zip_code` varchar(50) DEFAULT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
-  `latitude` float DEFAULT NULL,
-  `longtitude` float DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `reviews` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `restaurantId` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `grade` int(11) DEFAULT NULL,
-  `contents` varchar(500) DEFAULT NULL,
-  `use_yn` char(1) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `user_histories` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `rank` int(11) DEFAULT NULL,
-  `restaurant_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `weather_id` int(11) DEFAULT NULL,
-  `crated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 CREATE TABLE `users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(50) DEFAULT NULL,
   `name` varchar(50) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
   `use_yn` char(1) DEFAULT NULL,
-  `sns_yn` char(1) DEFAULT NULL,
-  `recomended_use_yn` char(1) DEFAULT NULL,
-  `recomended_time` int(11) DEFAULT NULL,
+  `auth_yn` char(1) DEFAULT NULL,
+  `sns_id` varchar(20) DEFAULT NULL,
+  `sns_type` char(2) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_auth_keys` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(20) DEFAULT NULL,
+  `auth_key` varchar(30) DEFAULT NULL,
+  `type` char(2) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `store_reviews` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(20) DEFAULT NULL,
+  `image_url` varchar(300) DEFAULT NULL,
+  `text` text,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `store_menus` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  `image_url` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `store_likes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(20) DEFAULT NULL,
+  `user_id` int(20) DEFAULT NULL,
+  `type` char(2) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `store` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `location_id` int(20) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `tel` varchar(50) DEFAULT NULL,
+  `open_time` varchar(50) DEFAULT NULL,
+  `close_time` varchar(50) DEFAULT NULL,
+  `open_days` varchar(50) DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longtitude` double DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `rooms` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `room_users` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `room_id` int(20) DEFAULT NULL,
+  `user_id` int(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `room_foods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `room_id` int(20) DEFAULT NULL,
+  `food_id` int(20) DEFAULT NULL,
+  `user_id` int(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `room_choice_foods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `room_id` int(20) DEFAULT NULL,
+  `food_id` int(20) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `locations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(20) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longtitude` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `foods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(20) DEFAULT NULL,
+  `store_id` int(20) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `image_url` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `category` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `image_url` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 </code></pre>
